@@ -4,47 +4,76 @@
 // License @GPLv3
 
 addEventListener('fetch', event => {
-    event.respondWith(handleRequest(event.request))
+      event.respondWith(handleRequest(event.request))
 })
 
 async function handleRequest(request) {
-    if (request.method === 'GET') {
-          return new Response(html, {
-                headers: {
-                      'Access-Control-Allow-Origin': '*',
-                      'content-type': 'text/html;charset=UTF-8',
-                },
-          })
-    } else if (request.method === 'POST') {
-          const formData = await request.formData()
-          const file = formData.get('file')
+      const urlParam = new URL(request.url).searchParams.get('url');
 
-          const response = await fetch("https://community.codewave.163.com/gateway/lowcode/api/v1/app/upload", {
-                method: 'POST',
-                headers: {
-                      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
-                      'Referer': 'https://community.codewave.163.com'
-                },
-                body: formData
-          })
+      if (request.method === 'GET' && !urlParam) {
+            return new Response(html, {
+                  headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'content-type': 'text/html;charset=UTF-8',
+                  },
+            })
+      } else if (request.method === 'POST') {
+            const formData = await request.formData()
+            const file = formData.get('file')
 
-          const data = await response.json()
+            const response = await fetch("https://community.codewave.163.com/gateway/lowcode/api/v1/app/upload", {
+                  method: 'POST',
+                  headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
+                        'Referer': 'https://community.codewave.163.com'
+                  },
+                  body: formData
+            })
 
-          let uploadUrl = data.result;
+            const data = await response.json()
 
-          // Calculate the equivalent URL
-          const originalBase = "https://lcap-static-saas.nos-eastchina1.126.net/";
-          const newBase = "https://community.codewave.163.com/upload/";
-          let equivalentUrl = uploadUrl.replace(originalBase, newBase);
-          let result = JSON.stringify({ uploadUrl, equivalentUrl });
+            let uploadUrl = data.result;
 
-          return new Response(result, {
-                headers: {
-                      'Access-Control-Allow-Origin': '*',
-                      'content-type': 'application/json',
-                },
-          })
-    }
+            // Calculate the equivalent URL
+            const originalBase = "https://lcap-static-saas.nos-eastchina1.126.net/";
+            const newBase = "https://community.codewave.163.com/upload/";
+            let equivalentUrl = uploadUrl.replace(originalBase, newBase);
+            let result = JSON.stringify({ uploadUrl, equivalentUrl });
+
+            return new Response(result, {
+                  headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'content-type': 'application/json',
+                  },
+            })
+      } else if (urlParam && request.method === 'GET') {
+            // 构建请求到 cleanuri.com 的 URL
+            const apiUrl = 'https://cleanuri.com/api/v1/shorten';
+            const requestOptions = {
+                  method: 'POST',
+                  body: `url=${encodeURIComponent(urlParam)}`,
+                  headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                  },
+            };
+
+            // 使用 fetch 发送 POST 请求到 cleanuri.com
+            const response = await fetch(apiUrl, requestOptions);
+
+            if (response.ok) {
+                  const responseData = await response.json();
+                  const shortenedUrl = responseData.result_url;
+
+                  // 返回缩短后的 URL
+                  return new Response(shortenedUrl, {
+                        headers: {
+                              'Access-Control-Allow-Origin': '*',
+                        },
+                  },);
+            } else {
+                  return new Response('Failed to shorten the URL', { status: 500 });
+            }
+      }
 }
 
 const html = `please use POST.`

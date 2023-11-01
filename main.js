@@ -1,4 +1,5 @@
 const uploadEndpoint = "https://163nfs--labs.cyberrain.dev/upload"
+const getShortLinkEndpoint = 'https://163nfs--labs.cyberrain.dev/getShortURL'
 
 async function uploadFile() {
     const fileInput = document.getElementById('fileInput');
@@ -16,14 +17,19 @@ async function uploadFile() {
     const resultUrl2 = document.getElementById('urlLink2');
     const resultOutput = document.getElementById('resultOutput');
 
-    resultUrl1.href = data.uploadUrl;
-    resultUrl1.textContent = data.uploadUrl;
+    // await getShortLink(data.uploadUrl).then((r) => {
+    //     resultUrl1.innerText = r;
+    // })
 
-    resultUrl2.href = data.equivalentUrl;
-    resultUrl2.textContent = data.equivalentUrl;
+    await getShortLink(data.equivalentUrl).then((r) => {
+        resultUrl1.innerText = data.equivalentUrl;
+        resultUrl2.innerText = r;
+    })
 
     resultOutput.style.display = 'unset';
     selectedFile.innerText = 'waiting...';
+
+    fileInput.value = '';
 }
 
 function selectFile() {
@@ -32,7 +38,6 @@ function selectFile() {
 }
 
 function copyTextToClipboard(element) {
-    console.log(element.children[0]);
     var textElement = element.children[0];
     var textArea = document.createElement("textarea");
     textArea.value = textElement.innerText;
@@ -53,4 +58,17 @@ function copyTextToClipboard(element) {
             boxShadow: "0 3px 6px -1px rgba(0, 0, 0, 0.217), 0 10px 36px -4px rgba(98, 98, 98, 0.171)"
         }
     }).showToast();
+}
+
+async function getShortLink(longLink) {
+    try {
+        longLink = encodeURIComponent(longLink);
+        const response = await fetch(getShortLinkEndpoint + "?url=" + longLink);
+        const data = response.text();
+        const result = data;
+        return result;
+    } catch (error) {
+        console.error("Error: " + error);
+        return null;
+    }
 }

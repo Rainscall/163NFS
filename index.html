@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>163NFS</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://lib.baomitu.com" />
+    <link rel="preconnect" href="https://cdn.staticfile.org" />
+    <link rel="stylesheet" href="https://cdn.staticfile.org/toastify-js/1.12.0/toastify.min.css">
+
+</head>
+
+<body>
+    <noscript>Your need to enable JavaScript to use this service.</noscript>
+    <div class="basePart">
+        <div class="childPart headingPart">
+            <h1>163NFS</h1>
+        </div>
+        <div class="childPart greyBackground fileInputPart">
+            <div class="selectFile greyBackground" onclick="selectFile()">
+                <span>Select file</span>
+            </div>
+            <input type="file" id="fileInput" style="display: none;" onchange="uploadFile()" />
+            <div class="selectedFile">
+                <span id="selectedFile">waiting...</span>
+            </div>
+        </div>
+
+        <div class="childPart greyBackground" id="resultOutput" style="display: none;">
+            <div class="resultPart greyBackground" onclick="copyTextToClipboard(this)">
+                <span id="urlLink1"></span>
+            </div>
+            <div class="resultPart greyBackground" onclick="copyTextToClipboard(this)">
+                <span id="urlLink2"></span>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.staticfile.org/toastify-js/1.12.0/toastify.min.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>

@@ -61,7 +61,7 @@ h1 {
 
 .childPart {
     max-width: calc(512px - 24px);
-    width: calc(80vw - 24px);
+    width: calc(90vw - 24px);
     border-radius: 12px;
     padding: 12px;
 }
@@ -99,6 +99,16 @@ h1 {
     color: #9f9f9f;
 }
 
+#selectedFile {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
 .resultPart {
     min-height: 1em;
     width: 100%;
@@ -118,4 +128,42 @@ h1 {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+#qrcode {
+    width: fit-content;
+}
+
+.qrcodeImg {
+    image-rendering: pixelated;
+    display: block;
+    max-height: 6em;
+    max-width: 80%;
+}
+
+.qrcodeArea {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+}
+
+.qrcodeNotice {
+    min-height: calc(6em - 4px);
+    width: calc(100% - 6em - 8px);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.qrcodeNotice span {
+    user-select: none;
+    font-weight: bold;
+    font-size: 225%;
+    color: #b9b9b927;
+    position: relative;
+    top: 4px;
 }

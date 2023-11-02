@@ -4,7 +4,7 @@ const getShortLinkEndpoint = 'https://163nfs--labs.cyberrain.dev/getShortURL'
 async function uploadFile() {
     const fileInput = document.getElementById('fileInput');
     const selectedFile = document.getElementById('selectedFile');
-    selectedFile.innerText = 'uploading:' + fileInput.files[0].name;
+    selectedFile.innerText = 'uploading: ' + fileInput.files[0].name;
     const formData = new FormData();
     formData.append('file', fileInput.files[0]);
 
@@ -17,10 +17,6 @@ async function uploadFile() {
     const resultUrl2 = document.getElementById('urlLink2');
     const resultOutput = document.getElementById('resultOutput');
 
-    // await getShortLink(data.uploadUrl).then((r) => {
-    //     resultUrl1.innerText = r;
-    // })
-
     await getShortLink(data.equivalentUrl).then((r) => {
         resultUrl1.innerText = data.equivalentUrl;
         resultUrl2.innerText = r;
@@ -30,6 +26,11 @@ async function uploadFile() {
     selectedFile.innerText = 'waiting...';
 
     fileInput.value = '';
+
+    const qrcode = document.getElementById("qrcode");
+    new QRCode(qrcode, data.equivalentUrl);
+    qrcode.children[0].style.display = 'none';
+    qrcode.children[1].className = 'qrcodeImg';
 }
 
 function selectFile() {

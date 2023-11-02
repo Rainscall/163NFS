@@ -139,6 +139,7 @@ h1 {
     display: block;
     max-height: 6em;
     max-width: 80%;
+    height: 100%;
 }
 
 .qrcodeArea {

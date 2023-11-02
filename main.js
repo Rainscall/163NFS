@@ -27,10 +27,8 @@ async function uploadFile() {
 
     fileInput.value = '';
 
-    const qrcode = document.getElementById("qrcode");
-    new QRCode(qrcode, data.equivalentUrl);
-    qrcode.children[0].style.display = 'none';
-    qrcode.children[1].className = 'qrcodeImg';
+    const qrcodeImg = document.getElementById("qrcodeImg");
+    qrcodeImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + data.equivalentUrl;
 }
 
 function selectFile() {

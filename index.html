@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://lib.baomitu.com" />
     <link rel="preconnect" href="https://cdn.staticfile.org" />
+    <link rel="preconnect" href="https://api.qrserver.com">
     <link rel="stylesheet" href="https://cdn.staticfile.org/toastify-js/1.12.0/toastify.min.css">
 
 </head>
@@ -37,14 +38,15 @@
                 <span id="urlLink2"></span>
             </div>
             <div class="qrcodeArea">
-                <div class="resultPart greyBackground" id="qrcode"></div>
+                <div class="resultPart greyBackground" id="qrcode">
+                    <img id="qrcodeImg" class="qrcodeImg" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example" alt="a qrcode for the link" srcset="">
+                </div>
                 <div class="greyBackground qrcodeNotice">
                     <span>QRCODE</span>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdn.staticfile.org/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.staticfile.org/toastify-js/1.12.0/toastify.min.js"></script>
     <script src="main.js"></script>
 </body>

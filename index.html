@@ -16,13 +16,13 @@
 
 <body>
     <noscript>Your need to enable JavaScript to use this service.</noscript>
-    <div class="basePart">
+    <div class="basePart" id="basePart">
         <div class="childPart headingPart">
             <h1>163NFS</h1>
         </div>
         <div class="childPart greyBackground fileInputPart">
-            <div class="selectFile greyBackground" onclick="selectFile()">
-                <span>Select file</span>
+            <div class="selectFile greyBackground" onclick="selectFile()" id="selectFile">
+                <span id="fileInputPartText">Select file</span>
             </div>
             <input type="file" id="fileInput" style="display: none;" onchange="uploadFile()" />
             <div class="selectedFile">
@@ -42,7 +42,7 @@
                     <img id="qrcodeImg" class="qrcodeImg" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example" alt="a qrcode for the link" srcset="">
                 </div>
                 <div class="greyBackground qrcodeNotice">
-                    <span>QRCODE</span>
+                    <span>SUCCESS</span>
                 </div>
             </div>
         </div>

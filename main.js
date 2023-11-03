@@ -1,16 +1,81 @@
 const uploadEndpoint = "https://163nfs--labs.cyberrain.dev/upload"
 const getShortLinkEndpoint = 'https://163nfs--labs.cyberrain.dev/getShortURL'
+const dropInZone = document.getElementById('basePart');
+const fileInputPartText = document.getElementById('fileInputPartText');
 
-async function uploadFile() {
+dropInZone.addEventListener('dragenter', (e) => {
+    e.preventDefault();
+    fileInputPartText.innerText = 'Release to upload';
+});
+
+dropInZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    fileInputPartText.innerText = 'Release to upload';
+});
+
+dropInZone.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    fileInputPartText.innerText = 'Select file';
+});
+
+dropInZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadFile(e.dataTransfer.files);
+    fileInputPartText.innerText = 'Select file';
+});
+
+document.addEventListener('paste', function (event) {
+    event.preventDefault();
+    const clipboardData = event.clipboardData || window.clipboardData;
+    // 检查粘贴的数据是否包含文件
+    if (clipboardData && clipboardData.files.length > 0) {
+        uploadFile(clipboardData.files);
+    } else {
+        return;
+    }
+});
+
+function isImageFile(file) {
+    const mime = file.type;
+    return mime.startsWith("image/");
+}
+
+async function uploadFile(fileIn) {
     const fileInput = document.getElementById('fileInput');
     const selectedFile = document.getElementById('selectedFile');
-    selectedFile.innerText = 'uploading: ' + fileInput.files[0].name;
+    const selectFile = document.getElementById('selectFile');
+
     const formData = new FormData();
-    formData.append('file', fileInput.files[0]);
+
+    if (fileIn) {
+        formData.append('file', fileIn[0]);
+        selectedFile.innerText = 'uploading: ' + fileIn[0].name;
+        if (isImageFile(fileIn[0])) {
+            const reader = new FileReader();
+            reader.readAsDataURL(fileIn[0]);
+            reader.onload = () => {
+                selectFile.style.backgroundImage = 'url(' + reader.result + ')';
+            }
+        }
+    } else {
+        formData.append('file', fileInput.files[0]);
+        selectedFile.innerText = 'uploading: ' + fileInput.files[0].name;
+        if (isImageFile(fileInput.files[0])) {
+            const reader = new FileReader();
+            reader.readAsDataURL(fileInput.files[0]);
+            reader.onload = () => {
+                selectFile.style.backgroundImage = 'url(' + reader.result + ')';
+            }
+        }
+    }
 
     const response = await fetch(uploadEndpoint, {
         method: 'POST',
         body: formData
+    }).catch((error) => {
+        console.log(error);
+        selectedFile.innerText = 'FAILED';
+        return;
     });
     const data = await response.json();
     const resultUrl1 = document.getElementById('urlLink1');
@@ -24,8 +89,9 @@ async function uploadFile() {
 
     resultOutput.style.display = 'unset';
     selectedFile.innerText = 'waiting...';
+    selectFile.style.backgroundImage = 'none';
 
-    fileInput.value = '';
+    fileInput.files = void 0;
 
     const qrcodeImg = document.getElementById("qrcodeImg");
     qrcodeImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + data.equivalentUrl;

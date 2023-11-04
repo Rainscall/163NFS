@@ -94,7 +94,7 @@ async function uploadFile(fileIn) {
     fileInput.files = void 0;
 
     const qrcodeImg = document.getElementById("qrcodeImg");
-    qrcodeImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + data.equivalentUrl;
+    qrcodeImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(data.equivalentUrl);
 }
 
 function selectFile() {

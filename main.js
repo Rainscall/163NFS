@@ -96,6 +96,8 @@ async function uploadFile(fileIn) {
     const fileInfo = document.getElementById('fileInfo');
     fileInfoBlock = document.createElement('div');
 
+    fileInfo.innerHTML = '';
+
     let fileNameBlock = document.createElement('p');
     fileNameBlock.innerHTML = 'Name: ' + '<span>' + fileName + '</span>';
 

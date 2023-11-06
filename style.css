@@ -170,11 +170,29 @@ h1 {
     align-items: center;
 }
 
-.qrcodeNotice span {
-    user-select: none;
-    font-weight: bold;
-    font-size: 225%;
-    color: #40906fb8;
-    position: relative;
-    top: 4px;
+#fileInfo>div p {
+    color: #9f9f9f;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#fileInfo>div p span {
+    color: #787878;
+}
+
+#fileInfo>div {
+    width: 95%;
+    padding: 8px;
+    padding-left: 1em;
+}
+
+#fileInfo{
+    display: flex;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
 }

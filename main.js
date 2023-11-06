@@ -44,12 +44,18 @@ async function uploadFile(fileIn) {
     const fileInput = document.getElementById('fileInput');
     const selectedFile = document.getElementById('selectedFile');
     const selectFile = document.getElementById('selectFile');
-
     const formData = new FormData();
+
+    let fileName = '';
+    let fileSize = '';
+    let fileEditTime = '';
 
     if (fileIn) {
         formData.append('file', fileIn[0]);
         selectedFile.innerText = 'uploading: ' + fileIn[0].name;
+        fileName = fileIn[0].name;
+        fileSize = fileIn[0].size;
+        fileEditTime = fileIn[0].lastModifiedDate;
         if (isImageFile(fileIn[0])) {
             const reader = new FileReader();
             reader.readAsDataURL(fileIn[0]);
@@ -60,6 +66,9 @@ async function uploadFile(fileIn) {
     } else {
         formData.append('file', fileInput.files[0]);
         selectedFile.innerText = 'uploading: ' + fileInput.files[0].name;
+        fileName = fileInput.files[0].name;
+        fileSize = fileInput.files[0].size;
+        fileEditTime = fileInput.files[0].lastModifiedDate;
         if (isImageFile(fileInput.files[0])) {
             const reader = new FileReader();
             reader.readAsDataURL(fileInput.files[0]);
@@ -68,6 +77,9 @@ async function uploadFile(fileIn) {
             }
         }
     }
+
+    fileSize = (fileSize / 1024 / 1024).toFixed(3) + 'm';
+    fileEditTime = fileEditTime.getFullYear() + '-' + fileEditTime.getMonth() + '-' + fileEditTime.getDate();
 
     const response = await fetch(uploadEndpoint, {
         method: 'POST',
@@ -81,6 +93,23 @@ async function uploadFile(fileIn) {
     const resultUrl1 = document.getElementById('urlLink1');
     const resultUrl2 = document.getElementById('urlLink2');
     const resultOutput = document.getElementById('resultOutput');
+    const fileInfo = document.getElementById('fileInfo');
+    fileInfoBlock = document.createElement('div');
+
+    let fileNameBlock = document.createElement('p');
+    fileNameBlock.innerHTML = 'Name: ' + '<span>' + fileName + '</span>';
+
+    let fileSizeBlock = document.createElement('p');
+    fileSizeBlock.innerHTML = 'Size: ' + '<span>' + fileSize + '</span>';
+
+    let fileEditTimeBlock = document.createElement('p');
+    fileEditTimeBlock.innerHTML = 'Last edit time: ' + '<span>' + fileEditTime + '</span>';
+
+    fileInfoBlock.appendChild(fileNameBlock);
+    fileInfoBlock.appendChild(fileSizeBlock);
+    fileInfoBlock.appendChild(fileEditTimeBlock);
+
+    fileInfo.appendChild(fileInfoBlock);
 
     await getShortLink(data.equivalentUrl).then((r) => {
         resultUrl1.innerText = data.equivalentUrl;

@@ -78,8 +78,14 @@ async function uploadFile(fileIn) {
         }
     }
 
-    fileSize = (fileSize / 1024 / 1024).toFixed(3) + 'm';
-    fileEditTime = fileEditTime.getFullYear() + '-' + fileEditTime.getMonth() + '-' + fileEditTime.getDate();
+    if (fileSize > 700 * 1024) {
+        fileSize = (fileSize / 1024 / 1024).toFixed(3) + 'MiB';
+    } else {
+        fileSize = (fileSize / 1024).toFixed(3) + 'KiB';
+    }
+
+    //getMonth从0开始，需要+1
+    fileEditTime = fileEditTime.getFullYear() + '-' + (Number(fileEditTime.getMonth()) + 1) + '-' + fileEditTime.getDate();
 
     const response = await fetch(uploadEndpoint, {
         method: 'POST',
@@ -125,7 +131,20 @@ async function uploadFile(fileIn) {
     fileInput.files = void 0;
 
     const qrcodeImg = document.getElementById("qrcodeImg");
-    qrcodeImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(data.equivalentUrl);
+
+    fetch('https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(data.equivalentUrl))
+        .then(response => response.blob())
+        .then(blob => {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(blob);
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+                canvas.getContext('2d').drawImage(img, 0, 0);
+                qrcodeImg.src = canvas.toDataURL('image/png');
+            };
+        });
 }
 
 function selectFile() {
@@ -167,4 +186,18 @@ async function getShortLink(longLink) {
         console.error("Error: " + error);
         return null;
     }
+}
+
+function generateImageDataURL(width, height) {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL();
+}
+
+document.body.onload = () => {
+    const qrcodeImg = document.getElementById("qrcodeImg");
+    qrcodeImg.src = generateImageDataURL(150, 150);
 }

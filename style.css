@@ -176,6 +176,7 @@ h1 {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    line-height: 1.3em;
 }
 
 #fileInfo>div p span {
@@ -189,7 +190,6 @@ h1 {
 }
 
 #fileInfo{
-    display: flex;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -119,9 +119,11 @@ async function uploadFile(fileIn) {
 
     fileInfo.appendChild(fileInfoBlock);
 
+    let shortLink = '';
     await getShortLink(data.equivalentUrl).then((r) => {
         resultUrl1.innerText = data.equivalentUrl;
         resultUrl2.innerText = r;
+        shortLink = r;
     })
 
     resultOutput.style.display = 'unset';
@@ -131,7 +133,7 @@ async function uploadFile(fileIn) {
     fileInput.files = void 0;
 
     const qrcodeImg = document.getElementById("qrcodeImg");
-    qrcodeImg.src = generateQRCode(data.equivalentUrl, 150, 150);
+    qrcodeImg.src = generateQRCode(data.equivalentUrl.length < 64 ? data.equivalentUrl : shortLink, 150, 150);
 }
 
 function selectFile() {
@@ -194,9 +196,9 @@ function generateQRCode(data, width, height) {
     var qrcode = new QRCode(document.createElement("div"), {
         text: data,
         width: width,
-        colorDark: "#000000",
+        colorDark: "#4f4f4f",
         colorLight: "#ededed",
-        correctLevel : QRCode.CorrectLevel.L,
+        correctLevel: QRCode.CorrectLevel.L,
         height: height
     });
     // 获取生成的二维码图片的data URL

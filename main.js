@@ -131,20 +131,7 @@ async function uploadFile(fileIn) {
     fileInput.files = void 0;
 
     const qrcodeImg = document.getElementById("qrcodeImg");
-
-    fetch('https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(data.equivalentUrl))
-        .then(response => response.blob())
-        .then(blob => {
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(blob);
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                canvas.width = img.naturalWidth;
-                canvas.height = img.naturalHeight;
-                canvas.getContext('2d').drawImage(img, 0, 0);
-                qrcodeImg.src = canvas.toDataURL('image/png');
-            };
-        });
+    qrcodeImg.src = generateQRCode(data.equivalentUrl, 150, 150);
 }
 
 function selectFile() {
@@ -200,4 +187,21 @@ function generateImageDataURL(width, height) {
 document.body.onload = () => {
     const qrcodeImg = document.getElementById("qrcodeImg");
     qrcodeImg.src = generateImageDataURL(150, 150);
+}
+
+function generateQRCode(data, width, height) {
+    // 创建一个新的QRCode实例
+    var qrcode = new QRCode(document.createElement("div"), {
+        text: data,
+        width: width,
+        colorDark: "#000000",
+        colorLight: "#ededed",
+        correctLevel : QRCode.CorrectLevel.L,
+        height: height
+    });
+    // 获取生成的二维码图片的data URL
+    var dataURL = qrcode._el.firstChild.toDataURL("image/png");
+    // 销毁QRCode实例，以释放资源
+    qrcode._el.innerHTML = "";
+    return dataURL;
 }

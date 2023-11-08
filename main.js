@@ -46,6 +46,9 @@ async function uploadFile(fileIn) {
     const selectFile = document.getElementById('selectFile');
     const formData = new FormData();
 
+    fileInputPartText.innerText = 'Uploading';
+    fileInputPartText.className = 'fileInputPartTextUploading';
+
     let fileName = '';
     let fileSize = '';
     let fileEditTime = '';
@@ -78,6 +81,24 @@ async function uploadFile(fileIn) {
         }
     }
 
+    let isLargeFile = false;
+    if (fileSize > 50 * 1024 * 1024) {
+        Toastify({
+            text: "WARN: Uploaded files may not be previewed.",
+            duration: 4500,
+            className: "info",
+            position: "center",
+            gravity: "top",
+            style: {
+                color: "#000",
+                background: "#efe40c",
+                borderRadius: "8px",
+                boxShadow: "0 3px 6px -1px rgba(0, 0, 0, 0.217), 0 10px 36px -4px rgba(98, 98, 98, 0.171)"
+            }
+        }).showToast();
+        isLargeFile = true;
+    }
+
     if (fileSize > 700 * 1024) {
         fileSize = (fileSize / 1024 / 1024).toFixed(3) + 'MiB';
     } else {
@@ -91,8 +112,21 @@ async function uploadFile(fileIn) {
         method: 'POST',
         body: formData
     }).catch((error) => {
-        console.log(error);
-        selectedFile.innerText = 'FAILED';
+        Toastify({
+            text: "Error: " + error,
+            duration: 4500,
+            className: "info",
+            position: "center",
+            gravity: "bottom",
+            style: {
+                background: "#840D23",
+                borderRadius: "8px",
+                boxShadow: "0 3px 6px -1px rgba(0, 0, 0, 0.217), 0 10px 36px -4px rgba(98, 98, 98, 0.171)"
+            }
+        }).showToast();
+        fileInputPartText.innerText = 'ERROR';
+        fileInputPartText.className += ' fileInputPartTextError';
+        selectedFile.innerText = error;
         return;
     });
     const data = await response.json();
@@ -119,9 +153,16 @@ async function uploadFile(fileIn) {
 
     fileInfo.appendChild(fileInfoBlock);
 
+    let longLink = '';
+    if (isLargeFile === true) {
+        longLink = data.uploadUrl;
+    } else {
+        longLink = data.equivalentUrl;
+    }
+    
     let shortLink = '';
-    await getShortLink(data.equivalentUrl).then((r) => {
-        resultUrl1.innerText = data.equivalentUrl;
+    await getShortLink(longLink).then((r) => {
+        resultUrl1.innerText = longLink;
         resultUrl2.innerText = r;
         shortLink = r;
     })
@@ -129,11 +170,13 @@ async function uploadFile(fileIn) {
     resultOutput.style.display = 'unset';
     selectedFile.innerText = 'waiting...';
     selectFile.style.backgroundImage = 'none';
+    fileInputPartText.innerText = 'Select file';
+    fileInputPartText.className = '';
 
     fileInput.files = void 0;
 
     const qrcodeImg = document.getElementById("qrcodeImg");
-    qrcodeImg.src = generateQRCode(fileName.length < 16 ? data.equivalentUrl : shortLink, 150, 150);
+    qrcodeImg.src = generateQRCode(fileName.length < 32 ? longLink : shortLink, 150, 150);
 }
 
 function selectFile() {

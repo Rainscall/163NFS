@@ -86,7 +86,7 @@ async function uploadFile(fileIn) {
     }
 
     let isLargeFile = false;
-    if (fileSize > 50 * 1024 * 1024) {
+    if (fileSize > 30 * 1024 * 1024) {
         Toastify({
             text: "WARN: Uploaded files may not be previewed.",
             duration: 4500,

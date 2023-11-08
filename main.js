@@ -133,7 +133,7 @@ async function uploadFile(fileIn) {
     fileInput.files = void 0;
 
     const qrcodeImg = document.getElementById("qrcodeImg");
-    qrcodeImg.src = generateQRCode(data.equivalentUrl.length < 64 ? data.equivalentUrl : shortLink, 150, 150);
+    qrcodeImg.src = generateQRCode(fileName.length < 16 ? data.equivalentUrl : shortLink, 150, 150);
 }
 
 function selectFile() {

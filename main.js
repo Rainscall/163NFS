@@ -46,6 +46,10 @@ async function uploadFile(fileIn) {
     const selectFile = document.getElementById('selectFile');
     const formData = new FormData();
 
+    if (!fileInput.files[0] && !fileIn) {
+        return;
+    }
+
     fileInputPartText.innerText = 'Uploading';
     fileInputPartText.className = 'fileInputPartTextUploading';
 
@@ -134,7 +138,7 @@ async function uploadFile(fileIn) {
     const resultUrl2 = document.getElementById('urlLink2');
     const resultOutput = document.getElementById('resultOutput');
     const fileInfo = document.getElementById('fileInfo');
-    fileInfoBlock = document.createElement('div');
+    let fileInfoBlock = document.createElement('div');
 
     fileInfo.innerHTML = '';
 
@@ -159,7 +163,7 @@ async function uploadFile(fileIn) {
     } else {
         longLink = data.equivalentUrl;
     }
-    
+
     let shortLink = '';
     await getShortLink(longLink).then((r) => {
         resultUrl1.innerText = longLink;
@@ -239,7 +243,7 @@ function generateQRCode(data, width, height) {
     var qrcode = new QRCode(document.createElement("div"), {
         text: data,
         width: width,
-        colorDark: "#4f4f4f",
+        colorDark: "#000",
         colorLight: "#ededed",
         correctLevel: QRCode.CorrectLevel.L,
         height: height

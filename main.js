@@ -259,6 +259,8 @@ function generateQRCode(data, width, height) {
     return dataURL;
 }
 
+
+
 // 获取浏览器的名称和版本
 var ua = navigator.userAgent;
 var browserName = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
@@ -267,8 +269,18 @@ var browserVersion = ua.match(/version\/(\d+)/i) || [];
 if (browserName[1] === "Chrome") {
     var version = parseInt(browserName[2], 10);
     if (version < 85) {
-        createWarningWindow('Outdated browser', 'Your browser is too old (' + browserName[1] + ' ' + version + '), it\' recommend to update your browser, or it may not be able to use this service. You can find the latest browser <a rel=\'nofollow\' target=\'blank\' href=\'https://browsehappy.com/\'>right here</a>.', 'continue anyway');
+        createWarningWindow('Outdated browser', 'Your browser is too old (' + browserName[1] + ' ' + version + '), it\'s recommend to update your browser, or it may not be able to use this service. You can find the latest browser <a rel=\'nofollow\' target=\'blank\' href=\'https://browsehappy.com/\'>right here</a>.', 'continue anyway');
     }
+}
+
+//检查浏览器是否支持onclick
+const testOnclickElement = document.createElement('div');
+let testOnclickValue = false;
+testOnclickElement.setAttribute("onclick", "testOnclickValue=true");
+testOnclickElement.click();
+if (testOnclickValue === false) {
+    let info = 'Your browser (' + browserName[1] + ' ' + version + ') does NOT support onclick function, it\'s time to update your browser, you can find the latest browser <a style=\'color:#FFF\' rel=\'nofollow\' target=\'blank\' href=\'https://browsehappy.com/\'>right here</a>.';
+    createWarningWindow('Not supported browser', info, 'continue anyway', '#840D23', '#FFF', false);
 }
 
 function randomString(e) {
@@ -280,7 +292,7 @@ function randomString(e) {
     return n
 }
 
-function createWarningWindow(headingText, infoText, closeButtomText) {
+function createWarningWindow(headingText, infoText, closeButtomText, bgColor, fColor, showCloseButtom) {
     let base = document.createElement('div');
     let child = document.createElement('div');
     let heading = document.createElement('h1');
@@ -292,26 +304,47 @@ function createWarningWindow(headingText, infoText, closeButtomText) {
         closeButtomText = 'close';
     }
 
+    if (!bgColor) {
+        bgColor = '#efe40c'
+    }
+
+    if (!fColor) {
+        fColor = '#000'
+    }
+
+    if (showCloseButtom == null) {
+        showCloseButtom = true;
+    }
+
     base.id = baseID;
     base.className = 'basePart warningWindow';
+    base.style.color = fColor;
     base.style.position = 'fixed';
     base.style.height = '100vh';
     base.style.zIndex = '9000';
-    base.style.backgroundColor = '#efe40c';
+    base.style.backgroundColor = bgColor;
     heading.innerText = headingText;
     info.innerHTML = infoText;
-    closeButtom.setAttribute("onclick", "closeOverlay(\"" + baseID + "\")");
-    closeButtom.className = 'closeButtom';
-    closeButtom.innerText = closeButtomText;
 
     child.className = 'childPart';
     child.prepend(heading);
     child.appendChild(info);
-    child.appendChild(closeButtom);
+
+    if (showCloseButtom === true) {
+        closeButtom.setAttribute("onclick", "closeOverlay(\"" + baseID + "\")");
+        closeButtom.className = 'closeButtom';
+        closeButtom.innerText = closeButtomText;
+        child.appendChild(closeButtom);
+    }
+
     base.appendChild(child);
     document.body.prepend(base);
 }
 
 function closeOverlay(elementID) {
     document.getElementById(elementID).parentNode.removeChild(document.getElementById(elementID));
+}
+
+function removeMe(element) {
+    element.parentNode.removeChild(element);
 }

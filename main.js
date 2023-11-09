@@ -258,3 +258,60 @@ function generateQRCode(data, width, height) {
     qrcode._el.innerHTML = "";
     return dataURL;
 }
+
+// 获取浏览器的名称和版本
+var ua = navigator.userAgent;
+var browserName = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+var browserVersion = ua.match(/version\/(\d+)/i) || [];
+
+if (browserName[1] === "Chrome") {
+    var version = parseInt(browserName[2], 10);
+    if (version < 85) {
+        createWarningWindow('Outdated browser', 'Your browser is too old (' + browserName[1] + ' ' + version + '), it\' recommend to update your browser, or it may not be able to use this service. You can find the latest browser <a rel=\'nofollow\' target=\'blank\' href=\'https://browsehappy.com/\'>right here</a>.', 'continue anyway');
+    }
+}
+
+function randomString(e) {
+    e = e || 32;
+    var t = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678",
+        a = t.length,
+        n = "";
+    for (i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
+    return n
+}
+
+function createWarningWindow(headingText, infoText, closeButtomText) {
+    let base = document.createElement('div');
+    let child = document.createElement('div');
+    let heading = document.createElement('h1');
+    let info = document.createElement('p');
+    let closeButtom = document.createElement('div');
+    const baseID = 'warningInfo-' + randomString(8);
+
+    if (!closeButtomText) {
+        closeButtomText = 'close';
+    }
+
+    base.id = baseID;
+    base.className = 'basePart warningWindow';
+    base.style.position = 'fixed';
+    base.style.height = '100vh';
+    base.style.zIndex = '9000';
+    base.style.backgroundColor = '#efe40c';
+    heading.innerText = headingText;
+    info.innerHTML = infoText;
+    closeButtom.setAttribute("onclick", "closeOverlay(\"" + baseID + "\")");
+    closeButtom.className = 'closeButtom';
+    closeButtom.innerText = closeButtomText;
+
+    child.className = 'childPart';
+    child.prepend(heading);
+    child.appendChild(info);
+    child.appendChild(closeButtom);
+    base.appendChild(child);
+    document.body.prepend(base);
+}
+
+function closeOverlay(elementID) {
+    document.getElementById(elementID).parentNode.removeChild(document.getElementById(elementID));
+}

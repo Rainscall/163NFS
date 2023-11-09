@@ -220,3 +220,35 @@ h1 {
     box-shadow: 0 0 14px 3px #ffffff;
     transition: ease-in-out box-shadow 0.234s;
 }
+
+.warningWindow p {
+    margin-top: 4px;
+}
+
+.warningWindow a {
+    color: #000000;
+}
+
+.warningWindow {
+    color: #000000;
+}
+
+.closeButtom {
+    height: fit-content;
+    width: 100%;
+    background-color: #ffffff;
+    padding: 8px;
+    padding-bottom: 6px;
+    color: #000;
+    border-radius: 16px;
+    text-align: center;
+    margin-top: 8px;
+    cursor: pointer;
+    box-shadow: none;
+    transition: ease-in-out box-shadow 0.234s;
+}
+
+.closeButtom:hover{
+    box-shadow: 0 0 10px 1px #fff;
+    transition: ease-in-out box-shadow 0.234s;
+}

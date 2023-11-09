@@ -21,8 +21,9 @@
             <h1>163NFS</h1>
         </div>
         <div class="childPart greyBackground fileInputPart">
-            <div class="selectFile greyBackground" onclick="selectFile()" id="selectFile">
+            <div class="selectFile greyBackground shadowBackground" onclick="selectFile()" id="selectFile">
                 <span id="fileInputPartText">Select file</span>
+                <noscript><span style="font-weight: bolder;font-size: 1.2em;color: red;">You need to enable JavaScript to use this service.</span></noscript>
             </div>
             <input type="file" id="fileInput" style="display: none;" onchange="uploadFile()" />
             <div class="selectedFile">
@@ -31,17 +32,17 @@
         </div>
 
         <div class="childPart greyBackground" id="resultOutput" style="display: none;">
-            <div class="resultPart greyBackground" onclick="copyTextToClipboard(this)">
+            <div class="resultPart greyBackground shadowBackground" onclick="copyTextToClipboard(this)">
                 <span id="urlLink1"></span>
             </div>
-            <div class="resultPart greyBackground" onclick="copyTextToClipboard(this)">
+            <div class="resultPart greyBackground shadowBackground" onclick="copyTextToClipboard(this)">
                 <span id="urlLink2"></span>
             </div>
             <div class="qrcodeArea">
-                <div class="resultPart greyBackground" id="qrcode">
-                    <img id="qrcodeImg" class="qrcodeImg" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example" alt="a qrcode for the link" srcset="">
+                <div class="resultPart greyBackground shadowBackground" id="qrcode">
+                    <img id="qrcodeImg" class="qrcodeImg" src="" alt="a qrcode for the link" srcset="">
                 </div>
-                <div class="greyBackground qrcodeNotice" id="fileInfo">
+                <div class="greyBackground qrcodeNotice shadowBackground" id="fileInfo">
                 </div>
             </div>
         </div>

@@ -15,13 +15,17 @@ dropInZone.addEventListener('dragover', (e) => {
 
 dropInZone.addEventListener('dragleave', (e) => {
     e.preventDefault();
-    fileInputPartText.innerText = 'Select file';
+    if (!fileInputPartText.className) {
+        fileInputPartText.innerText = 'Select file';
+    }
 });
 
 dropInZone.addEventListener('drop', (e) => {
     e.preventDefault();
     uploadFile(e.dataTransfer.files);
-    fileInputPartText.innerText = 'Select file';
+    if (!fileInputPartText.className) {
+        fileInputPartText.innerText = 'Select file';
+    }
 });
 
 document.addEventListener('paste', function (event) {

@@ -210,3 +210,13 @@ h1 {
 .fileInputPartTextError {
     background-color: #840D23;
 }
+
+.shadowBackground {
+    box-shadow: none;
+    transition: ease-in-out box-shadow 0.234s;
+}
+
+.shadowBackground:hover {
+    box-shadow: 0 0 14px 3px #ffffff;
+    transition: ease-in-out box-shadow 0.234s;
+}

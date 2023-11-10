@@ -327,7 +327,7 @@ function createWarningWindow(headingText, infoText, closeButtomText, bgColor, fC
     child.appendChild(info);
 
     if (showCloseButtom === true) {
-        closeButtom.setAttribute("onclick", "closeOverlay(\"" + baseID + "\")");
+        closeButtom.setAttribute("onclick", "closeOverlay(\"" + baseID + "\");agreeUse();");
         closeButtom.className = 'closeButtom';
         closeButtom.innerText = closeButtomText;
         child.appendChild(closeButtom);
@@ -344,3 +344,15 @@ function closeOverlay(elementID) {
 function removeMe(element) {
     element.parentNode.removeChild(element);
 }
+
+function agreeUse() {
+    localStorage.setItem('isAgreed', 'false');
+}
+
+(() => {
+    let isAgreed = localStorage.getItem('isAgreed');
+    if (!isAgreed) {
+        let info = 'By clicking \'agree\', you agree to the following:<br /><br />We will not collect information about the files you upload, but the server where the files are stored is not under our control, and we do not guarantee whether the server where the files are stored will collect information.<br /><br />The security and availability of stored files are not guaranteed.<br /><br />The file is stored in Mainland China and must comply with the laws of Mainland China.';
+        createWarningWindow('Agreement', info, 'agree', '#777', '#FFF', true);
+    }
+})();

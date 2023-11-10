@@ -273,13 +273,9 @@ if (browserName[1] === "Chrome") {
     }
 }
 
-//检查浏览器是否支持onclick
-const testOnclickElement = document.createElement('div');
-let testOnclickValue = false;
-testOnclickElement.setAttribute("onclick", "testOnclickValue=true");
-testOnclickElement.click();
-if (testOnclickValue === false) {
-    let info = 'Your browser (' + browserName[1] + ' ' + version + ') does NOT support onclick function, it\'s time to update your browser, you can find the latest browser <a style=\'color:#FFF\' rel=\'nofollow\' target=\'blank\' href=\'https://browsehappy.com/\'>right here</a>.';
+//检查浏览器是否支持onclick、fetch
+if (!'onclick' in window || !'fetch' in window) {
+    let info = 'Your browser (' + browserName[1] + ' ' + version + ') does NOT support some function, it\'s time to update your browser, you can find the latest browser <a style=\'color:#FFF\' rel=\'nofollow\' target=\'blank\' href=\'https://browsehappy.com/\'>right here</a>.';
     createWarningWindow('Not supported browser', info, 'continue anyway', '#840D23', '#FFF', false);
 }
 
